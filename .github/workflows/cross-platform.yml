@@ -1,0 +1,37 @@
+name: Cross-platform
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and test detected stack
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $tested = $false
+          $dotnet = Get-ChildItem . -Recurse -File -Include *.sln,*.csproj -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($dotnet) { $tested = $true; dotnet restore $dotnet.FullName; dotnet test $dotnet.FullName --configuration Release }
+          if (Test-Path package.json) { $tested = $true; if (Test-Path package-lock.json) { npm ci } else { npm install }; npm test --if-present; npm run build --if-present }
+          if ((Test-Path pyproject.toml) -or (Test-Path requirements.txt) -or (Get-ChildItem . -Recurse -File -Filter *.py -ErrorAction SilentlyContinue | Select-Object -First 1)) { $tested = $true; python -m compileall -q . }
+          if (Test-Path Cargo.toml) { $tested = $true; cargo test --all }
+          if (Test-Path go.mod) { $tested = $true; go test ./... }
+          if (Test-Path CMakeLists.txt) { $tested = $true; cmake -S . -B build-ci; cmake --build build-ci --config Release; ctest --test-dir build-ci -C Release --output-on-failure }
+          if ((Test-Path gradlew) -or (Test-Path gradlew.bat)) { $tested = $true; if ($IsWindows -and (Test-Path gradlew.bat)) { .\gradlew.bat test } else { chmod +x ./gradlew; ./gradlew test } }
+          if ($IsMacOS) { $xcode = Get-ChildItem . -Recurse -Directory -Filter *.xcodeproj -ErrorAction SilentlyContinue | Select-Object -First 1; if ($xcode) { $tested = $true; xcodebuild -list -project $xcode.FullName } }
+          if (-not $tested) { Write-Host 'No recognized build manifest found; checkout completed.' }
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Docker support when present
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f Dockerfile ]; then docker build -t portability-check .; else echo '::warning::No root Dockerfile found; add one for executable/service repos.'; fi
