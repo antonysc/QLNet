@@ -21,3 +21,18 @@ Be kind to code reviewers, please try to keep pull requests as small and focused
 
 **IMPORTANT**: By submitting a patch via a Pull Request, you agree to allow the project
 owners to license your work under the terms of the [BSD3 License](https://github.com/amaggiulli/qlnet/blob/develop/LICENSE).
+
+---
+
+## Evolution record
+
+- Goal, roadmap, and change IDs:
+- Planned and expected result:
+- Done or fixed:
+- Evidence:
+- Rollout gate:
+- Rollback trigger and procedure:
+- Next step and owner:
+
+- [ ] `PROJECT_EVOLUTION.md` was updated, or this change is formatting/comment-only.
+- [ ] Cartography, decisions, rollout, rollback, timeline, and next step remain current.

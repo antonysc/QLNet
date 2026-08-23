@@ -1,0 +1,26 @@
+name: Repository evolution
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Validate pull request
+        if: github.event_name == 'pull_request'
+        run: python tools/check_repository_evolution.py --base "${{ github.event.pull_request.base.sha }}"
+      - name: Validate current workspace
+        if: github.event_name == 'workflow_dispatch'
+        run: python tools/check_repository_evolution.py
+
