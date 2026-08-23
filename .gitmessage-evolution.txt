@@ -1,0 +1,17 @@
+
+# Required trailers for a meaningful commit:
+Evolution-Type: done
+Evolution-Refs: auto
+Evolution-Expected: describe the observable result
+Evolution-Why: describe why this change is needed
+Evolution-Rollout: none — explain why no rollout is needed
+Evolution-Rollback: describe how to recover or explain why not applicable
+Evolution-Next: owner — concrete action — review date
+
+# For Evolution-Type: fixed
+# Evolution-Root-Cause: describe the confirmed root cause
+
+# For Evolution-Type: decision
+# Evolution-Choice: describe the selected choice
+
+

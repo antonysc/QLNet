@@ -2,6 +2,7 @@ name: Repository evolution
 
 on:
   pull_request:
+  merge_group:
   workflow_dispatch:
 
 permissions:
@@ -9,6 +10,7 @@ permissions:
 
 jobs:
   validate:
+    name: Repository evolution
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,10 +19,28 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.x"
-      - name: Validate pull request
-        if: github.event_name == 'pull_request'
-        run: python tools/check_repository_evolution.py --base "${{ github.event.pull_request.base.sha }}"
-      - name: Validate current workspace
+      - name: Validate pull request commits
+        if: >-
+          github.event_name == 'pull_request' &&
+          github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: python tools/evolution.py validate --range "$BASE_SHA..HEAD"
+      - name: Explain fork requirement
+        if: >-
+          github.event_name == 'pull_request' &&
+          github.event.pull_request.head.repo.full_name != github.repository
+        shell: bash
+        run: |
+          echo "Fork pull requests must generate their evolution record locally." >&2
+          echo "Run exactly: python tools/evolution.py generate --commit HEAD" >&2
+          python tools/evolution.py validate --range "${{ github.event.pull_request.base.sha }}..HEAD"
+      - name: Validate merge queue
+        if: github.event_name == 'merge_group'
+        env:
+          BASE_SHA: ${{ github.event.merge_group.base_sha }}
+        run: python tools/evolution.py validate --range "$BASE_SHA..HEAD"
+      - name: Validate current document
         if: github.event_name == 'workflow_dispatch'
-        run: python tools/check_repository_evolution.py
+        run: python tools/evolution.py validate --document-only
 
