@@ -2,15 +2,30 @@
 
 ## Evolution documentation
 
-`PROJECT_EVOLUTION.md` is the repository's living source of truth for goals, roadmap, cartography, decisions, fixes, rollout, rollback, evidence, and the next action.
+`PROJECT_EVOLUTION.md` is the living source of truth for goals, roadmap,
+cartography, decisions, fixes, rollout, rollback, evidence, and the next action.
 
-For every meaningful change:
+For every meaningful source commit:
 
-1. Read **Start Here**, the affected map, roadmap items, decisions, and release plan before editing.
-2. Update `PROJECT_EVOLUTION.md` in the same change as behavior, interfaces, dependencies, architecture, operational risk, fixes, or delivery sequencing.
-3. Preserve history: mark abandoned plans and choices `superseded`; never silently delete them.
-4. Record expected and actual outcomes. Completed work must link to evidence.
-5. Keep rollout gates and rollback triggers executable, including data recovery where relevant.
-6. Append the timeline and leave exactly one concrete next step with an owner.
+1. Read **Start Here**, the affected roadmap items, decisions, and release plan.
+2. Add every mandatory `Evolution-*` trailer from `.gitmessage-evolution.txt`.
+3. Use `Evolution-Refs: auto` only when no stable roadmap, change, fix, decision,
+   or release identifier exists yet.
+4. Run `python tools/evolution.py generate --commit HEAD` before pushing. The
+   pre-push hook rejects a missing immutable record.
+5. Do not hand-edit marker-managed blocks. The deterministic renderer owns them.
+6. Update human-authored goals, cartography, decisions, risks, and delivery
+   choices when the commit changes high-level truth; preserve superseded history.
+7. Keep rollout and rollback instructions executable and leave a concrete next
+   action with an owner and date.
 
-Formatting-only and comment-only edits are exempt.
+Install the repository hooks once per clone with:
+
+```text
+python tools/evolution.py install-hooks
+```
+
+Fork pull requests must include locally generated records because GitHub cannot
+write into a fork branch. Markdown, comments, governance, CI rules, and generated
+evolution files are exempt from commit trailers.
+
