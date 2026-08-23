@@ -15,6 +15,10 @@
 | Next step | antonysc — validate this baseline against current priorities and promote the first project delivery item — review by 2026-09-06 |
 | Why this next | It converts inferred repository intent into an owned, measurable delivery choice. |
 
+<!-- evolution:auto:current:start -->
+_No automated source-commit records yet._
+<!-- evolution:auto:current:end -->
+
 ## Evolving Goal
 
 ### Current outcome
@@ -101,6 +105,10 @@ flowchart LR
 |---|---|---|---|---|---|
 | `R-001` | `shipped` | 2026-08-23 | Living evolution governance added | Merge pull request and repository files | `R-002` |
 
+<!-- evolution:auto:roadmap:start -->
+_No automated source-commit records yet._
+<!-- evolution:auto:roadmap:end -->
+
 ## Change Records
 
 ### `CHG-001` — Establish living repository evolution governance
@@ -117,6 +125,10 @@ flowchart LR
 | Rollback | Revert the merge commit if the check blocks valid delivery and cannot be corrected promptly. |
 | Evidence | Repository files and merge pull request |
 | Next | Follow the single action in **Start Here**. |
+
+<!-- evolution:auto:changes:start -->
+_No automated source-commit records yet._
+<!-- evolution:auto:changes:end -->
 
 ## Decisions
 
@@ -137,6 +149,10 @@ flowchart LR
 | Fix ID | Symptom and impact | Root cause | Correction | Regression evidence | Released in | Status |
 |---|---|---|---|---|---|---|
 | `FIX-001` | Plans, choices, fixes, and recovery steps could be scattered or absent | No canonical evolution record | Added this maintained record and review coupling | Repository-evolution CI check | `REL-001` | `fixed` |
+
+<!-- evolution:auto:fixes:start -->
+_No automated source-commit records yet._
+<!-- evolution:auto:fixes:end -->
 
 ## Rollout and Rollback
 
@@ -173,6 +189,10 @@ Rollback trigger detected
 └── Record the rollback here before proposing a corrected rollout
 ```
 
+<!-- evolution:auto:release:start -->
+_No automated source-commit records yet._
+<!-- evolution:auto:release:end -->
+
 ## Risks, Blockers, and Unknowns
 
 | ID | Type | Description | Impact | Mitigation or unblock condition | Owner | Review date | Status |
@@ -189,6 +209,10 @@ Rollback trigger detected
 No earlier evolution ledger was found.
 
 Allowed event types: `planned`, `started`, `expected`, `done`, `fixed`, `decision`, `rollout`, `verified`, `rollback`, `superseded`, `blocked`, `unblocked`.
+
+<!-- evolution:auto:timeline:start -->
+_No automated source-commit records yet._
+<!-- evolution:auto:timeline:end -->
 
 ## Maintenance Contract
 
