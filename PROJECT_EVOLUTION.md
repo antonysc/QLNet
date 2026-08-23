@@ -16,7 +16,15 @@
 | Why this next | It converts inferred repository intent into an owned, measurable delivery choice. |
 
 <!-- evolution:auto:current:start -->
-_No automated source-commit records yet._
+### Automated current state
+
+| Field | Recorded value |
+|---|---|
+| Source | `edd076f` — test(evolution): exercise automatic record |
+| Type/status | `verified` / `verified` |
+| Expected | GitHub creates one immutable Markdown record for this source SHA |
+| Next | antonysc — inspect generated record — 2026-08-23 |
+| Record | [record](evolution/commits/edd076f79c9579ddd4b8b626f38717f161cc7817.md) |
 <!-- evolution:auto:current:end -->
 
 ## Evolving Goal
@@ -106,7 +114,11 @@ flowchart LR
 | `R-001` | `shipped` | 2026-08-23 | Living evolution governance added | Merge pull request and repository files | `R-002` |
 
 <!-- evolution:auto:roadmap:start -->
-_No automated source-commit records yet._
+### Automated reference state
+
+| Reference | Status | Expected | Last source | Evidence |
+|---|---|---|---|---|
+| `CHG-EVOLUTION-SMOKE` | `verified` | GitHub creates one immutable Markdown record for this source SHA | `edd076f` | [record](evolution/commits/edd076f79c9579ddd4b8b626f38717f161cc7817.md) |
 <!-- evolution:auto:roadmap:end -->
 
 ## Change Records
@@ -127,7 +139,11 @@ _No automated source-commit records yet._
 | Next | Follow the single action in **Start Here**. |
 
 <!-- evolution:auto:changes:start -->
-_No automated source-commit records yet._
+### Automated commit records
+
+| Source | Type | Change | Why | Record |
+|---|---|---|---|---|
+| `edd076f` | `verified` | test(evolution): exercise automatic record | verify the pilot before portfolio-wide rollout | [record](evolution/commits/edd076f79c9579ddd4b8b626f38717f161cc7817.md) |
 <!-- evolution:auto:changes:end -->
 
 ## Decisions
@@ -151,7 +167,11 @@ _No automated source-commit records yet._
 | `FIX-001` | Plans, choices, fixes, and recovery steps could be scattered or absent | No canonical evolution record | Added this maintained record and review coupling | Repository-evolution CI check | `REL-001` | `fixed` |
 
 <!-- evolution:auto:fixes:start -->
-_No automated source-commit records yet._
+### Automated fixes
+
+| Source | Fix | Root cause | Expected correction | Evidence |
+|---|---|---|---|---|
+| — | No automated fix recorded | — | — | — |
 <!-- evolution:auto:fixes:end -->
 
 ## Rollout and Rollback
@@ -190,7 +210,11 @@ Rollback trigger detected
 ```
 
 <!-- evolution:auto:release:start -->
-_No automated source-commit records yet._
+### Automated release signals
+
+| Source | Type | Rollout | Rollback | Evidence |
+|---|---|---|---|---|
+| `edd076f` | `verified` | isolated validation branch only | abandon the validation branch; never merge it | [record](evolution/commits/edd076f79c9579ddd4b8b626f38717f161cc7817.md) |
 <!-- evolution:auto:release:end -->
 
 ## Risks, Blockers, and Unknowns
@@ -211,7 +235,11 @@ No earlier evolution ledger was found.
 Allowed event types: `planned`, `started`, `expected`, `done`, `fixed`, `decision`, `rollout`, `verified`, `rollback`, `superseded`, `blocked`, `unblocked`.
 
 <!-- evolution:auto:timeline:start -->
-_No automated source-commit records yet._
+### Automated commit timeline
+
+| Date | Source | Type | Change | Next | Evidence |
+|---|---|---|---|---|---|
+| `2026-08-23T12:36:04+02:00` | `edd076f` | `verified` | test(evolution): exercise automatic record | antonysc — inspect generated record — 2026-08-23 | [record](evolution/commits/edd076f79c9579ddd4b8b626f38717f161cc7817.md) |
 <!-- evolution:auto:timeline:end -->
 
 ## Maintenance Contract
