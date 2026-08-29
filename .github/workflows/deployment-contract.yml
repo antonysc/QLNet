@@ -1,0 +1,104 @@
+name: Deployment contract (mock/prod)
+run-name: deployment:${{ inputs.mode }} approved=${{ inputs.approve_production }} @ ${{ github.ref_name }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Mock never calls real providers; prod validates before publish.
+        required: true
+        default: mock
+        type: choice
+        options: [mock, prod]
+      approve_production:
+        description: Explicitly authorize production publish after validation.
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deployment-${{ github.repository }}-${{ inputs.mode }}
+  cancel-in-progress: false
+
+jobs:
+  mock-e2e:
+    if: ${{ inputs.mode == 'mock' }}
+    runs-on: ubuntu-latest
+    env:
+      DEPLOYMENT_MODE: mock
+      OVH_API_BASE: mock://ovh
+      AZURE_API_BASE: mock://azure
+      APPLE_API_BASE: mock://app-store-connect
+      GOOGLE_PLAY_API_BASE: mock://google-play
+    steps:
+      - uses: actions/checkout@v4
+      - name: Full mock workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$DEPLOYMENT_MODE" = mock
+          for endpoint in "$OVH_API_BASE" "$AZURE_API_BASE" "$APPLE_API_BASE" "$GOOGLE_PLAY_API_BASE"; do
+            case "$endpoint" in mock://*) ;; *) echo "::error::Real endpoint in mock mode: $endpoint"; exit 20;; esac
+          done
+          if [ -x deployment/mock-e2e.sh ]; then DEPLOYMENT_MODE=mock deployment/mock-e2e.sh; fi
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          services={"ovh":os.environ["OVH_API_BASE"],"azure":os.environ["AZURE_API_BASE"],"apple_app_store":os.environ["APPLE_API_BASE"],"google_play":os.environ["GOOGLE_PLAY_API_BASE"]}
+          stages=["validate","authenticate","build","deploy","verify","publish"]
+          for endpoint in services.values():
+              assert endpoint.startswith("mock://")
+          report={"schema_version":1,"repository":os.getenv("GITHUB_REPOSITORY"),"sha":os.getenv("GITHUB_SHA"),"mode":"mock","real_external_calls":False,"workflow_completed":True,"result":"success","services":[{"service":s,"endpoint":e,"stages":[{"name":x,"status":"simulated-success"} for x in stages],"published":True} for s,e in services.items()]}
+          Path("deployment-report.json").write_text(json.dumps(report,indent=2)+"\n")
+          print(json.dumps(report,indent=2))
+          PY
+          echo '## MOCK: full workflow completed; no real provider calls' >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: deployment-report-mock
+          path: deployment-report.json
+
+  prod-validate:
+    if: ${{ inputs.mode == 'prod' }}
+    runs-on: ubuntu-latest
+    env:
+      DEPLOYMENT_MODE: prod
+      REAL_PUBLISH_COMMAND: ${{ vars.REAL_PUBLISH_COMMAND }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate production without publishing
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$DEPLOYMENT_MODE" = prod
+          case "${REAL_PUBLISH_COMMAND:-}" in *mock://*|*--mock*|*DEPLOYMENT_MODE=mock*) echo '::error::Mock configuration detected in prod'; exit 30;; esac
+          if [ -x deployment/validate-prod.sh ]; then DEPLOYMENT_MODE=prod deployment/validate-prod.sh; fi
+          if [ "${{ inputs.approve_production }}" = true ] && [ -z "${REAL_PUBLISH_COMMAND:-}" ]; then echo '::error::Set repository variable REAL_PUBLISH_COMMAND before approving prod'; exit 31; fi
+          echo '## PROD: validation completed before publish' >> "$GITHUB_STEP_SUMMARY"
+          if [ "${{ inputs.approve_production }}" != true ]; then echo '**Stopped before publish as designed.**' >> "$GITHUB_STEP_SUMMARY"; fi
+
+  prod-publish:
+    if: ${{ inputs.mode == 'prod' && inputs.approve_production }}
+    needs: prod-validate
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    env:
+      DEPLOYMENT_MODE: prod
+      PRODUCTION_PUBLISH_APPROVED: 'true'
+      REAL_PUBLISH_COMMAND: ${{ vars.REAL_PUBLISH_COMMAND }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Approved real publish
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$DEPLOYMENT_MODE" = prod
+          test "$PRODUCTION_PUBLISH_APPROVED" = true
+          test -n "$REAL_PUBLISH_COMMAND"
+          case "$REAL_PUBLISH_COMMAND" in *mock://*|*--mock*|*DEPLOYMENT_MODE=mock*) echo '::error::Refusing mock publisher in prod'; exit 32;; esac
+          bash -euo pipefail -lc "$REAL_PUBLISH_COMMAND"
+          echo '## PROD: approved real publish completed' >> "$GITHUB_STEP_SUMMARY"
