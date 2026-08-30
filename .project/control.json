@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "repository": {"full_name": "antonysc/QLNet", "default_branch": "develop", "control_path": ".project/control.json"},
+  "tracking": {"standardization_status": "VERIFIED", "deployment_contract_status": "MERGED", "production_readiness": "PARTIAL"},
+  "project": {"status": "UNKNOWN", "components": [], "owners": []},
+  "dependencies": {"internal": [], "external": []},
+  "tasks": {"summary": {"total": 0, "done": 0, "in_progress": 0, "blocked": 0}, "items": []},
+  "workflow": {"deployment_contract": ".github/workflows/deployment-contract.yml", "last_run": null},
+  "deployment": {"environments": {"dev": {"desired_version": null, "deployed_version": null, "runtime_version": null, "deployment_status": "NOT_STARTED", "runtime_status": "UNKNOWN", "provider": null, "mode": null, "commit": null, "updated_at": null}, "staging": {"desired_version": null, "deployed_version": null, "runtime_version": null, "deployment_status": "NOT_STARTED", "runtime_status": "UNKNOWN", "provider": null, "mode": null, "commit": null, "updated_at": null}, "prod": {"desired_version": null, "deployed_version": null, "runtime_version": null, "deployment_status": "NOT_STARTED", "runtime_status": "UNKNOWN", "provider": null, "mode": null, "commit": null, "updated_at": null}}},
+  "extensions": {},
+  "metadata": {"standardized_at": "2026-08-30", "updated_at": null, "updated_by": null}
+}
