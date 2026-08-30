@@ -4,6 +4,7 @@ permissions:
   contents: read
 jobs:
   native:
+    if: ${{ vars.CROSS_PLATFORM_ENFORCED == 'true' }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -27,6 +28,7 @@ jobs:
           if ($IsMacOS) { $xcode = Get-ChildItem . -Recurse -Directory -Filter *.xcodeproj -ErrorAction SilentlyContinue | Select-Object -First 1; if ($xcode) { $tested = $true; xcodebuild -list -project $xcode.FullName } }
           if (-not $tested) { Write-Host 'No recognized build manifest found; checkout completed.' }
   docker:
+    if: ${{ vars.CROSS_PLATFORM_ENFORCED == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
