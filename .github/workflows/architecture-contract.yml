@@ -1,0 +1,38 @@
+name: Architecture contract
+on:
+  pull_request:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  architecture-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - name: Determine changed files
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = pull_request ]; then BASE="${{ github.event.pull_request.base.sha }}"; elif [ "${{ github.event_name }}" = push ] && [ "${{ github.event.before }}" != 0000000000000000000000000000000000000000 ]; then BASE="${{ github.event.before }}"; else BASE="$(git rev-list --max-parents=0 HEAD | tail -1)"; fi
+          git diff --name-only "$BASE" "${{ github.sha }}" > /tmp/architecture-changed-files.txt
+      - name: Validate and enforce architecture sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m json.tool .architecture/technical.json >/dev/null
+          python -m json.tool .architecture/commercial.json >/dev/null
+          python - <<'PY'
+          import fnmatch,json
+          from pathlib import Path
+          t=json.loads(Path('.architecture/technical.json').read_text()); c=json.loads(Path('.architecture/commercial.json').read_text())
+          assert t.get('schema_version')==1 and t.get('kind')=='technical-architecture'; assert c.get('schema_version')==1 and c.get('kind')=='commercial-architecture'; assert t['repository']['full_name']==c['repository']['full_name']
+          changed=[p for p in Path('/tmp/architecture-changed-files.txt').read_text().splitlines() if p]; patterns=t.get('impact_rules',{}).get('paths',[]); raw={'.architecture/technical.json','.architecture/commercial.json'}; generated={'TECHNICAL_ARCHITECTURE.md','COMMERCIAL_ARCHITECTURE.md','.architecture/generate.py'}
+          impacted=[p for p in changed if p not in generated and any(fnmatch.fnmatch(p,x) for x in patterns)]
+          if impacted and not raw.intersection(changed): raise SystemExit('Architecture impact detected without raw architecture update: '+', '.join(impacted))
+          PY
+      - name: Regenerate architecture schemas
+        run: python .architecture/generate.py
+      - name: Require generated schemas committed
+        run: git diff --exit-code -- TECHNICAL_ARCHITECTURE.md COMMERCIAL_ARCHITECTURE.md
