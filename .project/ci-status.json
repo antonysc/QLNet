@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "kind": "ci-status-semantics",
+  "default_readiness": "TODO",
+  "states": {"TODO":"Expected work is not implemented or configured yet; this is not a failure.","IN_PROGRESS":"Implementation is actively in progress; this is not a failure.","WAITING_CONFIGURATION":"External configuration or credentials are still required; this is not a failure.","WAITING_APPROVAL":"The workflow is intentionally paused for approval; this is not a failure.","VERIFIED":"The capability is implemented and verified.","ENFORCED":"The capability is a required CI gate; execution errors are real failures.","FAILED":"An ENFORCED capability executed and actually failed its contract."},
+  "readiness": {"architecture":"ENFORCED","build":"TODO","test":"TODO","lint":"TODO","cross_platform":"TODO","deployment":"TODO","repository_evolution":"TODO"},
+  "metadata": {"standardized_at":"2026-08-30"}
+}

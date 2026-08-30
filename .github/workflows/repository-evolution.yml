@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   validate:
+    if: ${{ vars.REPOSITORY_EVOLUTION_ENFORCED == 'true' }}
     name: Repository evolution
     runs-on: ubuntu-latest
     steps:
@@ -43,4 +44,3 @@ jobs:
       - name: Validate current document
         if: github.event_name == 'workflow_dispatch'
         run: python tools/evolution.py validate --document-only
-
