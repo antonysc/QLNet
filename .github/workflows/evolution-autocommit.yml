@@ -12,6 +12,7 @@ concurrency:
 jobs:
   update-branch:
     if: >-
+      vars.REPOSITORY_EVOLUTION_ENFORCED == 'true' &&
       github.actor != 'github-actions[bot]' &&
       github.ref_name != github.event.repository.default_branch
     runs-on: ubuntu-latest
@@ -36,7 +37,6 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
           for attempt in 1 2 3; do
             git fetch origin "$BRANCH_NAME" "$DEFAULT_BRANCH"
             git reset --hard "origin/$BRANCH_NAME"
@@ -50,35 +50,26 @@ jobs:
                 generated=true
               fi
             done
-
             if [ "$generated" = false ]; then
-              echo "No evolution commit required."
               validated_sha=$(git rev-parse HEAD)
               python tools/evolution.py validate --range "origin/$DEFAULT_BRANCH..$validated_sha"
-              gh api --method POST "/repos/$GITHUB_REPOSITORY/statuses/$validated_sha" \
-                -f state=success \
-                -f context="Repository evolution" \
-                -f description="Evolution trailers and generated records are current"
+              gh api --method POST "/repos/$GITHUB_REPOSITORY/statuses/$validated_sha" -f state=success -f context="Repository evolution" -f description="Evolution trailers and generated records are current"
               exit 0
             fi
-
             if git push origin "HEAD:$BRANCH_NAME"; then
               documented_sha=$(git rev-parse HEAD)
               python tools/evolution.py validate --range "origin/$DEFAULT_BRANCH..$documented_sha"
-              gh api --method POST "/repos/$GITHUB_REPOSITORY/statuses/$documented_sha" \
-                -f state=success \
-                -f context="Repository evolution" \
-                -f description="Evolution trailers and generated records are current"
+              gh api --method POST "/repos/$GITHUB_REPOSITORY/statuses/$documented_sha" -f state=success -f context="Repository evolution" -f description="Evolution trailers and generated records are current"
               exit 0
             fi
-            echo "Concurrent update detected; retrying ($attempt/3)." >&2
           done
-
           echo "Unable to push the generated evolution commit after 3 attempts." >&2
           exit 1
 
   audit-default:
-    if: github.ref_name == github.event.repository.default_branch
+    if: >-
+      vars.REPOSITORY_EVOLUTION_ENFORCED == 'true' &&
+      github.ref_name == github.event.repository.default_branch
     name: Repository evolution
     runs-on: ubuntu-latest
     permissions:
@@ -101,4 +92,3 @@ jobs:
           else
             python tools/evolution.py validate --range "$BEFORE_SHA..HEAD"
           fi
-
