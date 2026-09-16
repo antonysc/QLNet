@@ -1,0 +1,6 @@
+# Opt-in bridge to the shared RemoteControl gateway template.
+# This file has no effect until the repository root pipeline includes it.
+include:
+  - project: antonysc/RemoteControl
+    ref: main
+    file: /ci/templates/runner-gateway.yml

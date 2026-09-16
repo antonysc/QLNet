@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "repository": "antonysc/QLNet",
+  "status": "WAITING_CONFIGURATION",
+  "execution_authority": {
+    "build": "github",
+    "mirror": "gitlab"
+  },
+  "github": {
+    "workflow": ".github/workflows/local-runner-gateway.yml",
+    "runner_scope": "repository",
+    "labels": [
+      "self-hosted",
+      "linux",
+      "x64",
+      "platform-local",
+      "cpu"
+    ],
+    "enabled_variable": "LOCAL_RUNNER_GATEWAY_ENABLED"
+  },
+  "gitlab": {
+    "template": ".gitlab/runner-gateway.yml",
+    "runner_tags": [
+      "local-docker"
+    ],
+    "enabled_variable": "RUNNER_GATEWAY_VALIDATE"
+  },
+  "gateway": {
+    "enabled_by_default": false,
+    "fail_mode": "closed",
+    "resource_class": "tiny",
+    "priority": 50,
+    "client_variable": "RUNNER_GATEWAY_CLIENT"
+  },
+  "verification": {
+    "configuration": "VERIFIED_LOCAL",
+    "github_job": "WAITING_CONFIGURATION",
+    "gitlab_job": "WAITING_CONFIGURATION",
+    "provider_overlap": "WAITING_CONFIGURATION"
+  }
+}

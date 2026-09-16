@@ -226,3 +226,15 @@ Before merging any meaningful change:
 - Append one timeline event.
 - Leave exactly one concrete next step with an owner.
 - Update `PORTFOLIO_EVOLUTION.md` in `antonysc/Setup` if goal, state, dependency, release phase, or next step changed.
+
+## Shared local CI gateway adoption — 2026-09-16
+
+| Field | Current truth |
+|---|---|
+| Scope | `antonysc/QLNet` opt-in GitHub and GitLab runner-gateway bridge |
+| Status | `WAITING_CONFIGURATION` — repository contract is present; no live runner or gateway job is claimed |
+| Execution authority | GitHub remains authoritative for repository builds; GitLab owns local mirroring and maintenance |
+| Safety | Manual/opt-in only, fail-closed, no credential or private endpoint committed |
+| Evidence | `.ci/local-runner-gateway.json`, `.github/workflows/local-runner-gateway.yml`, `.gitlab/runner-gateway.yml` |
+| Activation gate | Register the repository-scoped GitHub runner, configure protected variables, allowlist the repository server-side, then capture one real lease |
+| Rollback | Disable `LOCAL_RUNNER_GATEWAY_ENABLED`, remove the root GitLab include if activated, drain admissions, then revert this commit |

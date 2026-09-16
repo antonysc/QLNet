@@ -1,0 +1,39 @@
+name: Local runner gateway validation
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: "local-runner-gateway-${{ github.repository }}"
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    if: "${{ vars.LOCAL_RUNNER_GATEWAY_ENABLED == 'true' }}"
+    runs-on: [self-hosted, linux, x64, platform-local, cpu]
+    timeout-minutes: 15
+    env:
+      RUNNER_GATEWAY_URL: "${{ vars.RUNNER_GATEWAY_URL }}"
+      RUNNER_GATEWAY_TOKEN: "${{ secrets.RUNNER_GATEWAY_TOKEN }}"
+      RUNNER_GATEWAY_CLIENT: "${{ vars.RUNNER_GATEWAY_CLIENT || '/opt/remotecontrol/scripts/runner-gateway.sh' }}"
+      RUNNER_GATEWAY_FAIL_MODE: closed
+      RUNNER_GATEWAY_LEASE_FILE: "${{ runner.temp }}/gateway-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}.json"
+      RUNNER_RESOURCE_CLASS: tiny
+      RUNNER_PRIORITY: '50'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate installed gateway client
+        shell: bash
+        run: test -x "$RUNNER_GATEWAY_CLIENT"
+      - name: Validate one controlled lease
+        shell: bash
+        run: |
+          "$RUNNER_GATEWAY_CLIENT" run -- python3 -c 'import time; print("local runner gateway lease active"); time.sleep(2)'
+      - name: Release any remaining lease
+        if: "${{ always() }}"
+        shell: bash
+        run: |
+          "$RUNNER_GATEWAY_CLIENT" release
