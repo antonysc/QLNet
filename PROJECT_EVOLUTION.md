@@ -238,3 +238,17 @@ Before merging any meaningful change:
 | Evidence | `.ci/local-runner-gateway.json`, `.github/workflows/local-runner-gateway.yml`, `.gitlab/runner-gateway.yml` |
 | Activation gate | Register the repository-scoped GitHub runner, configure protected variables, allowlist the repository server-side, then capture one real lease |
 | Rollback | Disable `LOCAL_RUNNER_GATEWAY_ENABLED`, remove the root GitLab include if activated, drain admissions, then revert this commit |
+
+
+## Bitwarden Secrets Manager adoption — 2026-09-18
+
+| Field | Current truth |
+|---|---|
+| Applicability | Shared GitHub/GitLab runner and delivery credentials |
+| Bitwarden project | `cicd` |
+| Machine accounts | `github-runner` and `gitlab-runner`, read-only and isolated from domain projects |
+| Status | `DOCUMENTED`; live resolution remains `WAITING_CONFIGURATION` until scoped positive and negative reads are evidenced |
+| Compatibility | Existing workflow secret names, opt-in guards and native per-job tokens remain unchanged |
+| Safety | Repository configuration contains references only; `BWS_ACCESS_TOKEN` stays in protected CI or root-only runtime storage |
+| Activation gate | Authorized read, denied out-of-scope read, redacted-log review and existing workflow validation |
+| Rollback | Keep or restore the current protected-variable path, disable Bitwarden selection and rotate any superseded bootstrap token |
