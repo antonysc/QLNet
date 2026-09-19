@@ -2,7 +2,7 @@
 
 > Living source of truth for intent, delivery state, decisions, evidence, rollout, rollback, and the next action. Update it in the same change as the work it describes.
 
-<!-- evolution:reviewed=2026-08-23; owner=antonysc -->
+<!-- evolution:reviewed=2026-09-19; owner=antonysc -->
 
 ## Start Here
 
@@ -10,7 +10,7 @@
 |---|---|
 | Goal | `G-001` — Maintain a reliable C# quantitative-finance library compatible with established QuantLib behavior and supported .NET targets. |
 | State | `active` |
-| Last reviewed | `2026-08-23` |
+| Last reviewed | `2026-09-19` |
 | Current release | `REL-001` — evolution documentation rollout |
 | Next step | antonysc — validate this baseline against current priorities and promote the first project delivery item — review by 2026-09-06 |
 | Why this next | It converts inferred repository intent into an owned, measurable delivery choice. |
@@ -252,3 +252,17 @@ Before merging any meaningful change:
 | Safety | Repository configuration contains references only; `BWS_ACCESS_TOKEN` stays in protected CI or root-only runtime storage |
 | Activation gate | Authorized read, denied out-of-scope read, redacted-log review and existing workflow validation |
 | Rollback | Keep or restore the current protected-variable path, disable Bitwarden selection and rotate any superseded bootstrap token |
+
+## MAI Router V1 bootstrap adoption — 2026-09-19
+
+| Field | Current truth |
+|---|---|
+| Trace | `TRACE-20260919-MAI-ROUTER-V1` |
+| Central contract | `antonysc/Portfolio@main:mai/v1/MAI_CORE.md` |
+| Repository profile | `finance_quant` via `antonysc/Portfolio@main:mai/v1/PROJECT_SCOPE_REGISTRY.yaml` |
+| Change | Managed MAI entry-point blocks added to `AGENTS.md` and `CLAUDE.md`; prior repository instructions remain authoritative and preserved. |
+| Validation | Central contract, profile binding, marker uniqueness, `@AGENTS.md` import, idempotence and rendered output verified before publication. |
+| Scope | Agent routing and documentation only; repository implementation, credentials, deployments, CI readiness and production state are unchanged. |
+| Result | Entry points converge on `route(request, context) -> RoutingResult`; ambiguous mutations fail closed and domain expansion remains bounded. |
+| Rollback | Revert this commit or remove only the `MAI-ROUTER-V1` managed blocks; preserve every unmanaged instruction. |
+| Timeline event | `2026-09-19` — repository bootstrap adopted under the central Portfolio contract. |

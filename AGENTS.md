@@ -77,3 +77,42 @@ python tools/evolution.py install-hooks
 ```
 
 Markdown, comments, governance, CI rules, and generated evolution files are exempt from commit trailers.
+
+
+<!-- MAI-ROUTER-V1:BEGIN -->
+# Agent Bootstrap — MAI Router V1
+
+This repository participates in the centralized Portfolio / Workflow
+orchestration. The canonical routing contract is
+`antonysc/Portfolio@main:mai/v1/MAI_CORE.md`; its machine contracts and
+registries live beside it in `mai/v1/`.
+
+## Required behavior
+
+- Use MAI Router V1 as the default routing and execution model.
+- Determine the active project, repository, and sub-scope before acting.
+- Stay strictly inside that scope and activate only the minimum useful domains
+  and skills; normally select two to five domains.
+- Do not expand into unrelated general knowledge, literary work, or unchecked
+  speculation unless the request explicitly requires it.
+- Never invent missing project facts. Mark assumptions and uncertainty.
+- If a real dependency appears during execution, perform one minimal routing
+  expansion and record why it was necessary.
+- Prefer concrete outputs: specifications, plans, code, tests, workflows,
+  project updates, and validation evidence.
+- Follow the repository's local safety, validation, update, and commit rules.
+  A local rule may tighten the central contract, but must not silently weaken it.
+
+## Routing result
+
+For each task, determine the routing decision, active scope, active domains,
+excluded domains, execution plan, expected artifacts, assumptions, and
+out-of-scope items. Render those fields only when they help review or resolve
+ambiguity; the routing contract is required even when its presentation remains
+implicit.
+
+The governing question is: **what is the smallest useful scope that can move
+this task forward correctly?**
+
+Repository routing: `QLNet` uses profile `finance_quant` (revision `1.0.0`); canonical registry: `antonysc/Portfolio@main:mai/v1/PROJECT_SCOPE_REGISTRY.yaml`.
+<!-- MAI-ROUTER-V1:END -->
