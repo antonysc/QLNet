@@ -1,0 +1,30 @@
+name: Module contract
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-module-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate managed architecture contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s AGENTS.md
+          test -s CLAUDE.md
+          test -s module.yaml
+          grep -Fq '<!-- COEVOL-MODULE-CONTRACT-V1:BEGIN -->' AGENTS.md
+          grep -Fq '<!-- COEVOL-CLAUDE-MODULE-CONTRACT-V1:BEGIN -->' CLAUDE.md
+          for key in schema name kind version status description provides requires modules calls parameters compatibility internal; do
+            grep -Eq "^${key}:" module.yaml
+          done
+          if git grep -nEI '(password|token|secret|private_key):[[:space:]]+[^[:space:]$<{[]' -- module.yaml; then
+            echo "Potential secret value detected in module.yaml" >&2
+            exit 1
+          fi

@@ -1,0 +1,15 @@
+schema: coevol.module/v1
+name: "qlnet"
+kind: repository
+version: 1.0.0
+status: discovery_required
+description: "Versioned module catalog for antonysc/QLNet."
+provides: []
+requires: []
+modules: []
+calls: []
+parameters: []
+compatibility:
+  policy: backward-compatible
+  breaking_change: new-contract-version
+internal: "Populate modules, interfaces, calls, parameters, dependencies, and implementation evidence as the repository evolves."
