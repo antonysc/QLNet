@@ -13,8 +13,6 @@ Follow the replaceable-module contract in `AGENTS.md`. For every code change and
 <!-- COEVOL-CLAUDE-MODULE-CONTRACT-V1:END -->
 
 <!-- MAI-ROUTER-V1:BEGIN -->
-@AGENTS.md
-
 # Claude Bootstrap — MAI Router V1
 
 Treat the imported `AGENTS.md` rules as normative. Use the centralized MAI
@@ -31,7 +29,12 @@ current repository's project profile before planning or editing.
   imported through `AGENTS.md`: valid task/lease/write scope before editing,
   immutable claimed missions, fail-closed conflicts, scoped completion evidence,
   and `unknown` rather than invented execution metrics.
+- Resolve mission/task prompts from
+  `antonysc/Portfolio@main:roadmap/prompts/<mission_id>/`, never from chat
+  history, and challenge overlapping unclaimed work before claiming.
 
 Do not fork a separate Claude-specific routing or Roadmap policy. All agent entry
 points must converge on the same Portfolio / Workflow / Roadmap behavior.
+
+Repository routing: `QLNet` uses profile `finance_quant` (revision `1.0.0`); canonical registry: `antonysc/Portfolio@main:mai/v1/PROJECT_SCOPE_REGISTRY.yaml`.
 <!-- MAI-ROUTER-V1:END -->

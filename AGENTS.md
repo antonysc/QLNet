@@ -70,7 +70,6 @@ before editing. The canonical policy is `roadmap/POLICY.md`.
 - Before completion, compare actual changed paths with the authorized scope and run repository-local validation. Out-of-scope changes are not `DONE`.
 - Completion evidence must include all related commits/PRs, evolution updates, requested model/provider, actual model/provider when observable, elapsed time, and input/output/context/total token, credit and EUR-cost metrics when observable. Record `unknown` when unavailable; never fabricate.
 - Preserve Roadmap history for ingestion, consolidation, claim, conflict, heartbeat, scope extension, completion, failure, stale/recovery and supersession.
-
 - Durable execution prompts live under `antonysc/Portfolio@main:roadmap/prompts/<mission_id>/`; resolve the mission/task prompt there instead of reconstructing it from chat history.
 - Use `roadmap/missions/MISSIONS.md` and mission-local files for durable references; `QUEUE.yaml` remains canonical operational state and `HISTORY.jsonl` canonical lifecycle evidence.
 - Before claiming new work, challenge structurally mutable unclaimed tasks for overlap, duplication, dependencies and protected-resource conflicts; merge, deduplicate, split or supersede before dispatch while preserving lineage.

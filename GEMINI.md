@@ -17,6 +17,9 @@ project profile before planning or editing.
   `AGENTS.md`: valid task/lease/write scope before editing, immutable claimed
   missions, fail-closed conflicts, scoped completion evidence, and `unknown`
   rather than invented execution metrics.
+- Resolve mission/task prompts from
+  `antonysc/Portfolio@main:roadmap/prompts/<mission_id>/`, never from chat
+  history, and challenge overlapping unclaimed work before claiming.
 - Work in the same live workstream as ChatGPT/Codex and Claude: synchronize
   `main` first, never assume exclusive ownership, honor task claims and locks,
   never force-push, and leave an explicit handoff in tracked artifacts.
